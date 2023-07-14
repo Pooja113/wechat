@@ -1,4 +1,4 @@
-import mongoose, { Mongoose } from 'mongoose'
+import mongoose from 'mongoose'
 
 const chatModel = new mongoose.Schema({
   chatName: { type: String, trim: true },
@@ -11,4 +11,4 @@ const chatModel = new mongoose.Schema({
   timestamps: true,
   });
 
-export const Chat = Mongoose.model("Chat", chatModel)
+export const Chat = mongoose.model("Chat", chatModel)
