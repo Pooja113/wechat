@@ -9,6 +9,7 @@ const chatModel = new mongoose.Schema({
 },
   {
   timestamps: true,
-  });
+  },
+  { versionKey: false });
 
 export const Chat = mongoose.model("Chat", chatModel)

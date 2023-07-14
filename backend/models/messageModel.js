@@ -7,6 +7,6 @@ const messageModel = new mongoose.Schema({
 },
   {
   timestamps:true
-})
+},{ versionKey: false })
 
 export const Message = mongoose.model("Message", messageModel)
