@@ -3,6 +3,7 @@ import dotenv from 'dotenv'
 import cors from 'cors'
 import { connectDB } from './config/db.js';
 import userRoute from './routes/userRoutes.js'
+import chatRoute from './routes/chatRoutes.js'
 
 const app = express();
 app.use(express.json())
@@ -15,6 +16,8 @@ app.get('/', (req,res) => {
 })
 
 app.use('/user', userRoute)
+app.use('/chat', chatRoute)
+
 
 app.listen(process.env.PORT, () => {
   console.log(`server is running on ${process.env.PORT}`)

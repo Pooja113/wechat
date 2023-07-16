@@ -1,11 +1,16 @@
-import React from 'react'
+import React, { useContext } from "react";
+import { useNavigate } from "react-router-dom";
+import { ChatContext } from "../../Context/ChatProvider";
 
 const Chats = () => {
-  return (
-    <div>
-      Chats
-    </div>
-  )
-}
+  const navigate = useNavigate();
+  const { user } = useContext(ChatContext);
+  if(!user) {
+    navigate("/");
 
-export default Chats
+  }
+  console.log(user);
+  return <div>Chats</div>;
+};
+
+export default Chats;
