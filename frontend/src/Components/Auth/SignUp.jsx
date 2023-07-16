@@ -1,8 +1,13 @@
 import React, { useState } from 'react'
+import axios from 'axios'
+import {useNavigate} from 'react-router-dom';
+
 import { Button, FormControl, FormLabel, Input, InputGroup, InputRightAddon, InputRightElement, VStack } from '@chakra-ui/react'
 
+const BASE_URL="http://localhost:3001"
 
 const SignUp = () => {
+  const navigate = useNavigate();
   const [name, setName] = useState()
   const [email,setEmail] = useState()
   const [password,setPassword] = useState()
@@ -10,8 +15,63 @@ const SignUp = () => {
   const [pic, setPic] = useState()
   const [showPass, setShowPass] = useState(false)
   const [showConfirmPass, setShowConfirmPass] = useState(false)
-  const postDetails = () => {}
-  const submitHandler = () => {}
+  const [loading, setLoading] = useState(false)
+
+  const postDetails = (pics) => {
+    console.log(pics)
+    setLoading(true)
+    if(pics === undefined) {
+      console.log("Please select image")
+      return;
+    }
+    if(pics.type === "image/jpeg" || pics.type === "image/png") {
+      const data = new FormData();
+      data.append("file", pics)
+      data.append("upload_preset", "wechat")
+      data.append("cloud_name", "dcvgvvipn")
+      fetch("https://api.cloudinary.com/v1_1/dcvgvvipn/image/upload", {
+        method: "post",
+        body:data
+      }).then((res) => res.json())
+        .then((data) => {
+          setPic(data.url.toString());
+          setLoading(false)
+        }).catch((err) => {
+          console.log(err)
+          setLoading(false)
+      })
+
+    } else {
+      console.log("select Jpeg or png")
+      setLoading(false)
+      return
+    }
+  }
+  const submitHandler = async () => {
+    setLoading(true)
+    if(password !== confirmPassword) {
+      console.log("Check Passwords")
+    }
+
+    try {
+      const config = {
+        headers: {
+          "Content-type":"application/json"
+        }
+      }
+
+      const data = await axios.post(`${BASE_URL}/user/register`,
+        { name, email, password, pic },
+        config
+      )
+      localStorage.setItem("userToken", JSON.stringify(data))
+      navigate('/chats');
+      setLoading(false)
+    } catch (error) { 
+      console.log(error.message)
+      setLoading(false)
+    }
+  }
 
 
   return (
@@ -76,7 +136,7 @@ const SignUp = () => {
           onChange={(e)=>postDetails(e.target.files[0])}
           />
       </FormControl>
-      <Button colorScheme='green' width="100%" style={{marginTop:15}} onClick={submitHandler}> Sign Up</Button>
+      <Button colorScheme='green' width="100%" style={{marginTop:15}} onClick={submitHandler} isLoading={loading}> Sign Up</Button>
     </VStack>
   )
 }
