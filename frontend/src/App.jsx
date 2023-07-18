@@ -1,31 +1,22 @@
-import './App.css'
-import {
-  createBrowserRouter,
-  RouterProvider,
-} from "react-router-dom";
-import HomePage from './Pages/HomePage';
-import Chats from './Pages/Chats';
-
-const router = createBrowserRouter([
-  {
-    path: "/",
-    element: (
-      <HomePage />
-    ),
-  },
-  {
-    path: "chats",
-    element: <Chats />,
-  },
-])
+import "./App.css";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { ChatProvider } from "../Context/ChatProvider";
+import HomePage from "./Pages/HomePage";
+import Chats from "./Pages/Chats";
 
 function App() {
   return (
-    <div className='app'>
-      <RouterProvider router={router} />
+    <div className="app">
+      <Router>
+        <ChatProvider>
+          <Routes>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/chats" element={<Chats />} />
+          </Routes>
+        </ChatProvider>
+      </Router>
     </div>
-  )
-
+  );
 }
 
-export default App
+export default App;
