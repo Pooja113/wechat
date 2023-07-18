@@ -91,9 +91,7 @@ export const allUsers = async (req, res) => {
     
 
     const users = await Users.find(search).find({_id: {$ne: req.user.id}})
-    console.log(users)
-
-    res.status(200).json({users})
+    res.status(200).send(users)
     
   } catch (error) {
     res.status(400).json({message: error.message})
