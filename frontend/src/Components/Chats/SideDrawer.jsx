@@ -13,6 +13,7 @@ import {
   MenuDivider,
   MenuItem,
   MenuList,
+  Spinner,
   Text,
   Tooltip,
   useDisclosure,
@@ -37,7 +38,7 @@ const SideDrawer = () => {
   const [loadingChat, setLoadingChat] = useState(false);
 
 
-  const { user } = useContext(ChatContext);
+  const { user, setSelectedChat, chats, setChats } = useContext(ChatContext);
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const handleSearch = async () => {
@@ -65,10 +66,8 @@ const SideDrawer = () => {
         config
       );
       console.log(data)
-
       setLoading(false);
       setSearchResult(data);
-      console.log(searchResult)
     } catch (error) {
       toast({
         title: "Error Occured!",
@@ -82,14 +81,13 @@ const SideDrawer = () => {
   };
 
   const accessChat = async (userId) => {
-    console.log(userId);
 
     try {
       setLoadingChat(true);
       const config = {
         headers: {
           "Content-type": "application/json",
-          Authorization: `Bearer ${user.token}`,
+          Authorization: `Bearer ${user.data.token}`,
         },
       };
       const { data } = await axios.post(`${BASE_URL}/chat/create`, { userId }, config);
@@ -179,12 +177,13 @@ const SideDrawer = () => {
             ) : (
               searchResult?.map((user) => (
                 <UserListItem
-                  key={user.data._id}
-                  user={user.data}
-                  handleFunction={() => accessChat(user.data._id)}
+                  key={user._id}
+                  user={user}
+                  handleFunction={() => accessChat(user._id)}
                 />
               ))
             )}
+            {loadingChat &&  <Spinner ml="auto" display="flex" />}
           </DrawerBody>
         </DrawerContent>
       </Drawer>

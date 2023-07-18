@@ -30,7 +30,7 @@ export const createChat = async (req, res) => {
     try {
       const newChat = await Chat.create(chatData)
       const fullChat = await Chat.findOne({ _id: newChat._id }).populate("users", "-password")
-      res.status(200).json({data: fullChat})
+      res.status(200).send(fullChat)
     } catch (error) {
       res.status(400).json({data: error.message})
     }
@@ -40,7 +40,7 @@ export const createChat = async (req, res) => {
 
 export const fetchChat = async (req, res) => {
   try {
-    const fullChat = await Chat.find({ users: { $elemMatch: { $eq: req.user.id } } })
+    let fullChat = await Chat.find({ users: { $elemMatch: { $eq: req.user.id } } })
       .populate("users", "-password")
       .populate("groupAdmin", "-password")
       .populate("messages")
@@ -50,7 +50,7 @@ export const fetchChat = async (req, res) => {
       path: 'messages.sender',
       select: "name pic email",
     })
-    res.status(200).json(fullChat)
+    res.status(200).send(fullChat)
   } catch (error) {
     res.status(400).json({data: error.message})
   }
