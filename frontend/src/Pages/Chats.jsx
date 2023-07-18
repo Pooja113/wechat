@@ -1,16 +1,23 @@
-import React, { useContext } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useContext, useEffect } from "react";
 import { ChatContext } from "../../Context/ChatProvider";
+import MyChat from "../Components/Chats/MyChat";
+import ChatBox from "../Components/Chats/ChatBox";
+import SideDrawer from "../Components/Chats/SideDrawer";
+import { Box } from "@chakra-ui/react";
 
 const Chats = () => {
-  const navigate = useNavigate();
   const { user } = useContext(ChatContext);
-  if(!user) {
-    navigate("/");
+   
+   
+  return <div style={{ width: "100%" }}>
+    {user && <SideDrawer />}
+    
+    <Box display="flex" justifyContent="space-between" w="100%" h="91..5vh" p="10px">
+      {user && <MyChat />}
+      {user && <ChatBox />}
 
-  }
-  console.log(user);
-  return <div>Chats</div>;
+    </Box>
+  </div>;
 };
 
 export default Chats;
