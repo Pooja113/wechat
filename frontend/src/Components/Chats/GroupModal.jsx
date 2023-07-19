@@ -60,7 +60,10 @@ const GroupModal = ({ children }) => {
           Authorization: `Bearer ${user.data.token}`,
         },
       };
-      const { data } = await axios.get(`${BASE_URL}/user/all?search=${search}`, config);
+      const { data } = await axios.get(
+        `${BASE_URL}/user/all?search=${search}`,
+        config
+      );
       console.log(data);
       setLoading(false);
       setSearchResult(data);
@@ -183,7 +186,7 @@ const GroupModal = ({ children }) => {
             )}
           </ModalBody>
           <ModalFooter>
-            <Button onClick={handleSubmit} colorScheme="blue">
+            <Button onClick={handleSubmit} colorScheme="green">
               Create Chat
             </Button>
           </ModalFooter>
