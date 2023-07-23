@@ -10,11 +10,13 @@ import {
   InputRightAddon,
   InputRightElement,
   VStack,
+  useToast,
 } from "@chakra-ui/react";
 const BASE_URL = "http://localhost:3001";
 
 const SignUp = () => {
   const navigate = useNavigate();
+  const toast = useToast();
   const [name, setName] = useState();
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
@@ -25,10 +27,15 @@ const SignUp = () => {
   const [loading, setLoading] = useState(false);
 
   const postDetails = (pics) => {
-    console.log(pics);
     setLoading(true);
     if (pics === undefined) {
-      console.log("Please select image");
+      toast({
+        title: "Please Select an image",
+        status: "warning",
+        duration: 5000,
+        isClosable: true,
+        position: "bottom",
+      });
       return;
     }
     if (pics.type === "image/jpeg" || pics.type === "image/png") {
@@ -50,15 +57,39 @@ const SignUp = () => {
           setLoading(false);
         });
     } else {
-      console.log("select Jpeg or png");
+      toast({
+        title: "Please select an image!",
+        status: "warning",
+        duration: 5000,
+        isClosable: true,
+        position: "bottom",
+      });
       setLoading(false);
       return;
     }
   };
   const submitHandler = async () => {
     setLoading(true);
+    if (!name || !email || !password || !confirmPassword) {
+      toast({
+        title: "Please enter all the fields!!",
+        status: "warning",
+        duration: 5000,
+        isClosable: true,
+        position: "bottom",
+      });
+      setLoading(false);
+      return;
+    }
     if (password !== confirmPassword) {
-      console.log("Check Passwords");
+      toast({
+        title: "Passwords do not match!",
+        status: "warning",
+        duration: 5000,
+        isClosable: true,
+        position: "bottom",
+      });
+      return;
     }
 
     try {
@@ -68,7 +99,7 @@ const SignUp = () => {
         },
       };
 
-      const data = await axios.post(
+      const { data } = await axios.post(
         `${BASE_URL}/user/register`,
         { name, email, password, pic },
         config
@@ -77,7 +108,14 @@ const SignUp = () => {
       navigate("/chats");
       setLoading(false);
     } catch (error) {
-      console.log(error.message);
+      toast({
+        title: "Error Occured!",
+        description: error.response.data.message,
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+        position: "bottom",
+      });
       setLoading(false);
     }
   };

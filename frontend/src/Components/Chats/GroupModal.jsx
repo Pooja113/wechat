@@ -12,12 +12,13 @@ import {
   Input,
   useToast,
   Box,
+  Spinner,
 } from "@chakra-ui/react";
 import axios from "axios";
 import { useContext, useState } from "react";
-import { ChatContext } from "../../../Context/ChatProvider";
 import UserBadgeItem from "./UserList/UserBadgeItem";
 import UserListItem from "./UserList/UserListItem";
+import { ChatContext } from "../../Context/ChatProvider";
 
 const GroupModal = ({ children }) => {
   const BASE_URL = "http://localhost:3001";
@@ -57,14 +58,13 @@ const GroupModal = ({ children }) => {
       setLoading(true);
       const config = {
         headers: {
-          Authorization: `Bearer ${user.data.token}`,
+          Authorization: `Bearer ${user.token}`,
         },
       };
       const { data } = await axios.get(
         `${BASE_URL}/user/all?search=${search}`,
         config
       );
-      console.log(data);
       setLoading(false);
       setSearchResult(data);
     } catch (error) {
@@ -98,7 +98,7 @@ const GroupModal = ({ children }) => {
     try {
       const config = {
         headers: {
-          Authorization: `Bearer ${user.data.token}`,
+          Authorization: `Bearer ${user.token}`,
         },
       };
       const { data } = await axios.post(
@@ -171,11 +171,10 @@ const GroupModal = ({ children }) => {
               ))}
             </Box>
             {loading ? (
-              // <ChatLoading />
-              <div>Loading...</div>
+              <Spinner ml="auto" display="flex" />
             ) : (
               searchResult
-                ?.slice(0, 4)
+                ?.slice(0, 3)
                 .map((user) => (
                   <UserListItem
                     key={user._id}

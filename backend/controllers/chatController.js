@@ -1,5 +1,6 @@
 import { Chat } from "../models/chatModel.js"
 import { Users } from "../models/usersModels.js"
+import { groupValidation, groupaddValidation, renameValidation } from "../validators/index.js"
 
 export const createChat = async (req, res) => {
   const { userId } = req.body
@@ -20,7 +21,7 @@ export const createChat = async (req, res) => {
   })
 
   if(isChat.length>0) {
-    res.status(200).json({ data: isChat[0]})
+    res.status(200).send(isChat[0])
   } else {
     let chatData = {
       chatName: "sender",
@@ -58,17 +59,14 @@ export const fetchChat = async (req, res) => {
 }
 
 export const createGroup = async (req, res) => {
-  if(!req.body.users || !req.body.name) {
-    res.status(400).json({message: "Please Fill the required Fields"})
-  }
-
-  var users = JSON.parse(req.body.users)
-  if(users.length < 2) {
-    res.status(400).json({message: "Should be more than 2 users"})
-  }
-  users.push(req.user);
-
-  try {
+  try {    
+    await groupValidation.validate(req.body)
+    
+    let users = JSON.parse(req.body.users)
+    if(users.length < 2) {
+      res.status(400).json({message: "Should be more than 2 users"})
+    }
+    users.push(req.user);
     const groupdChat = await Chat.create(
       {
         chatName: req.body.name,
@@ -89,6 +87,8 @@ export const createGroup = async (req, res) => {
 export const renameGroup = async (req, res) => {
   const { chatId, chatName } = req.body
   try {
+    await renameValidation.validate(req.body)
+
     const renameGroup = await Chat.findByIdAndUpdate(
         chatId,
       { chatName },
@@ -112,6 +112,8 @@ export const renameGroup = async (req, res) => {
 export const removefromGroup = async (req, res) => {
   const { chatId, userId } = req.body
   try {
+    await groupaddValidation.validate(req.body)
+
     const removed = await Chat.findByIdAndUpdate(
         chatId,
       { $pull: { users: userId } },
@@ -135,6 +137,8 @@ export const removefromGroup = async (req, res) => {
 export const groupAdd = async (req, res) => {
   const { chatId, userId } = req.body
   try {
+    await groupaddValidation.validate(req.body)
+ 
     const added = await Chat.findByIdAndUpdate(
         chatId,
       { $push: { users: userId } },

@@ -18,8 +18,8 @@ import {
 } from "@chakra-ui/react";
 import axios from "axios";
 import { useContext, useState } from "react";
-import UserBadgeItem from "../Chats/UserList/UserBadgeItem";
-import UserListItem from "../Chats/UserList/UserListItem";
+import UserBadgeItem from "../UserList/UserBadgeItem";
+import UserListItem from "../UserList/UserListItem";
 import { ChatContext } from "../../../Context/ChatProvider";
 
 const UpdateGroupChatModal = ({ fetchMessages, fetchAgain, setFetchAgain }) => {
@@ -44,11 +44,13 @@ const UpdateGroupChatModal = ({ fetchMessages, fetchAgain, setFetchAgain }) => {
       setLoading(true);
       const config = {
         headers: {
-          Authorization: `Bearer ${user.data.token}`,
+          Authorization: `Bearer ${user.token}`,
         },
       };
-      const { data } = await axios.get(`${BASE_URL}/user/all?search=${search}`, config);
-      console.log(data);
+      const { data } = await axios.get(
+        `${BASE_URL}/user/all?search=${search}`,
+        config
+      );
       setLoading(false);
       setSearchResult(data);
     } catch (error) {
@@ -71,7 +73,7 @@ const UpdateGroupChatModal = ({ fetchMessages, fetchAgain, setFetchAgain }) => {
       setRenameLoading(true);
       const config = {
         headers: {
-          Authorization: `Bearer ${user.data.token}`,
+          Authorization: `Bearer ${user.token}`,
         },
       };
       const { data } = await axios.put(
@@ -83,8 +85,6 @@ const UpdateGroupChatModal = ({ fetchMessages, fetchAgain, setFetchAgain }) => {
         config
       );
 
-      console.log(data._id);
-      // setSelectedChat("");
       setSelectedChat(data);
       setFetchAgain(!fetchAgain);
       setRenameLoading(false);
@@ -103,7 +103,6 @@ const UpdateGroupChatModal = ({ fetchMessages, fetchAgain, setFetchAgain }) => {
   };
 
   const handleAddUser = async (user1) => {
-    console.log(selectedChat.users)
     if (selectedChat.users.find((u) => u._id === user1._id)) {
       toast({
         title: "User Already in group!",
@@ -115,7 +114,7 @@ const UpdateGroupChatModal = ({ fetchMessages, fetchAgain, setFetchAgain }) => {
       return;
     }
 
-    if (selectedChat.groupAdmin._id !== user.data._id) {
+    if (selectedChat.groupAdmin._id !== user._id) {
       toast({
         title: "Only admins can add someone!",
         status: "error",
@@ -130,7 +129,7 @@ const UpdateGroupChatModal = ({ fetchMessages, fetchAgain, setFetchAgain }) => {
       setLoading(true);
       const config = {
         headers: {
-          Authorization: `Bearer ${user.data.token}`,
+          Authorization: `Bearer ${user.token}`,
         },
       };
       const { data } = await axios.put(
@@ -160,7 +159,7 @@ const UpdateGroupChatModal = ({ fetchMessages, fetchAgain, setFetchAgain }) => {
   };
 
   const handleRemove = async (user1) => {
-    if (selectedChat.groupAdmin._id !== user.data._id && user1._id !== user.data._id) {
+    if (selectedChat.groupAdmin._id !== user._id && user1._id !== user._id) {
       toast({
         title: "Only admins can remove someone!",
         status: "error",
@@ -175,7 +174,7 @@ const UpdateGroupChatModal = ({ fetchMessages, fetchAgain, setFetchAgain }) => {
       setLoading(true);
       const config = {
         headers: {
-          Authorization: `Bearer ${user.data.token}`,
+          Authorization: `Bearer ${user.token}`,
         },
       };
       const { data } = await axios.put(
@@ -187,7 +186,7 @@ const UpdateGroupChatModal = ({ fetchMessages, fetchAgain, setFetchAgain }) => {
         config
       );
 
-      user1._id === user.data._id ? setSelectedChat() : setSelectedChat(data);
+      user1._id === user._id ? setSelectedChat() : setSelectedChat(data);
       setFetchAgain(!fetchAgain);
       fetchMessages();
       setLoading(false);
@@ -207,7 +206,11 @@ const UpdateGroupChatModal = ({ fetchMessages, fetchAgain, setFetchAgain }) => {
 
   return (
     <>
-      <IconButton display={{ base: "flex" }} icon={<ViewIcon />} onClick={onOpen} />
+      <IconButton
+        display={{ base: "flex" }}
+        icon={<ViewIcon />}
+        onClick={onOpen}
+      />
 
       <Modal onClose={onClose} isOpen={isOpen} isCentered>
         <ModalOverlay />

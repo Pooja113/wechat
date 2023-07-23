@@ -1,8 +1,8 @@
 import "./App.css";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { ChatProvider } from "../Context/ChatProvider";
 import HomePage from "./Pages/HomePage";
 import Chats from "./Pages/Chats";
+import { ChatProvider } from "./Context/ChatProvider";
 
 function App() {
   return (

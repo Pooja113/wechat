@@ -6,7 +6,6 @@ export const authorization = async (req,res,next) => {
   if(req.headers.authorization && req.headers.authorization.startsWith("Bearer")) {
     try {
       token = req.headers.authorization.split(" ")[1]
-      console.log(req.headers.authorization)
       const decode = jwt.verify(token, process.env.SECRET_KEY)
       req.user = await Users.findById(decode.userId).select("-password")
       next()

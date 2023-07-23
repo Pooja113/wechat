@@ -9,7 +9,7 @@ import {
   Tabs,
   Text,
 } from "@chakra-ui/react";
-import { ChatContext } from "../../Context/ChatProvider";
+import { ChatContext } from "../Context/ChatProvider";
 import Login from "../Components/Auth/Login";
 import SignUp from "../Components/Auth/SignUp";
 

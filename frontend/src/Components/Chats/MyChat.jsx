@@ -5,9 +5,9 @@ import axios from "axios";
 import { useContext, useEffect, useState } from "react";
 import ChatLoading from "./ChatLoading";
 import { Button } from "@chakra-ui/react";
-import { ChatContext } from "../../../Context/ChatProvider";
 import { getSender } from "../../config/ChatLogics";
 import GroupModal from "./GroupModal";
+import { ChatContext } from "../../Context/ChatProvider";
 
 const MyChat = ({ fetchAgain }) => {
   const BASE_URL = "http://localhost:3001";
@@ -20,10 +20,9 @@ const MyChat = ({ fetchAgain }) => {
     try {
       const config = {
         headers: {
-          Authorization: `Bearer ${user.data.token}`,
+          Authorization: `Bearer ${user.token}`,
         },
       };
-
       const { data } = await axios.get(`${BASE_URL}/chat/fetchAll`, config);
       setChats(data);
     } catch (error) {

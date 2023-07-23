@@ -1,10 +1,10 @@
 import React, { useContext } from "react";
-import { ChatContext } from "../../../Context/ChatProvider";
-import SingleChat from "../SingleChat";
+import SingleChat from "./SingleChat";
 import { Box } from "@chakra-ui/react";
 import "./style.css";
+import { ChatContext } from "../../Context/ChatProvider";
 
-const ChatBox = ({fetchAgain,setFetchAgain}) => {
+const ChatBox = ({ fetchAgain, setFetchAgain }) => {
   const { selectedChat } = useContext(ChatContext);
 
   return (
