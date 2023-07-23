@@ -21,7 +21,7 @@ import {
 } from "@chakra-ui/react";
 import React, { useContext, useState } from "react";
 import { BellIcon, ChevronDownIcon } from "@chakra-ui/icons";
-import { ChatContext } from "../../../Context/ChatProvider";
+import { ChatContext } from "../../Context/ChatProvider";
 import ProfileModal from "./ProfileModal";
 import { useNavigate } from "react-router-dom";
 import ChatLoading from "./ChatLoading";
@@ -36,7 +36,6 @@ const SideDrawer = () => {
   const [searchResult, setSearchResult] = useState([]);
   const [loading, setLoading] = useState(false);
   const [loadingChat, setLoadingChat] = useState(false);
-
 
   const { user, setSelectedChat, chats, setChats } = useContext(ChatContext);
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -57,7 +56,7 @@ const SideDrawer = () => {
       setLoading(true);
       const config = {
         headers: {
-          Authorization: `Bearer ${user.data.token}`,
+          Authorization: `Bearer ${user.token}`,
         },
       };
 
@@ -65,7 +64,6 @@ const SideDrawer = () => {
         `${BASE_URL}/user/all?search=${search}`,
         config
       );
-      console.log(data)
       setLoading(false);
       setSearchResult(data);
     } catch (error) {
@@ -81,16 +79,19 @@ const SideDrawer = () => {
   };
 
   const accessChat = async (userId) => {
-
     try {
       setLoadingChat(true);
       const config = {
         headers: {
           "Content-type": "application/json",
-          Authorization: `Bearer ${user.data.token}`,
+          Authorization: `Bearer ${user.token}`,
         },
       };
-      const { data } = await axios.post(`${BASE_URL}/chat/create`, { userId }, config);
+      const { data } = await axios.post(
+        `${BASE_URL}/chat/create`,
+        { userId },
+        config
+      );
 
       if (!chats.find((c) => c._id === data._id)) setChats([data, ...chats]);
       setSelectedChat(data);
@@ -143,12 +144,12 @@ const SideDrawer = () => {
               <Avatar
                 size="sm"
                 cursor="pointer"
-                name={user.data.name}
-                src={user.data.picture}
+                name={user.name}
+                src={user.picture}
               />
             </MenuButton>
             <MenuList>
-              <ProfileModal user={user.data}>
+              <ProfileModal user={user}>
                 {" "}
                 <MenuItem>My Profile</MenuItem>
               </ProfileModal>
@@ -183,7 +184,7 @@ const SideDrawer = () => {
                 />
               ))
             )}
-            {loadingChat &&  <Spinner ml="auto" display="flex" />}
+            {loadingChat && <Spinner ml="auto" display="flex" />}
           </DrawerBody>
         </DrawerContent>
       </Drawer>

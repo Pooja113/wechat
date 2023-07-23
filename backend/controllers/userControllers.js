@@ -1,11 +1,12 @@
 import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
 import { Users } from "../models/usersModels.js"
+import { loginValidaton, registerValidation } from '../validators/index.js'
 
 export const registerController = async (req, res) => {
   try {
     const { name, email, password, pic } = req.body
-  
+    await registerValidation.validate(req.body)
     const usersData = await Users.findOne({ email }) 
 
     if (usersData) {
@@ -21,14 +22,10 @@ export const registerController = async (req, res) => {
       picture: pic,
     })
 
-    console.log(newUser)
-
-  
     const token = jwt.sign({ userId: newUser._id, email }, process.env.SECRET_KEY, {
       expiresIn:"1d"
     })
 
-    console.log(token)
     if (newUser) {
       res.status(201).json({
         _id: newUser._id,
@@ -47,7 +44,7 @@ export const registerController = async (req, res) => {
 export const loginController = async (req, res) => {
   try {
     const { email, password } = req.body
-  
+    await loginValidaton.validate(req.body)
     const usersData = await Users.findOne({ email }) 
   
     if(!usersData) {

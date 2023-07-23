@@ -1,22 +1,22 @@
 import { FormControl } from "@chakra-ui/form-control";
 import { Input } from "@chakra-ui/input";
 import { Box, Text } from "@chakra-ui/layout";
-import "./Chats/style.css";
+import "./style.css";
 import { IconButton, Spinner, useToast } from "@chakra-ui/react";
-import { getSender, getSenderFull } from "../config/ChatLogics";
+import { getSender, getSenderFull } from "../../config/ChatLogics";
 import { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import { ArrowBackIcon } from "@chakra-ui/icons";
-import ProfileModal from "./Chats/ProfileModal";
+import ProfileModal from "./ProfileModal";
 //import ScrollableChat from "./ScrollableChat";
 //import Lottie from "react-lottie";
 //import animationData from "../animations/typing.json";
 
 //import io from "socket.io-client";
-import UpdateGroupChatModal from "./Group/UpdateGroupChatModal";
 import { ChatContext } from "../../Context/ChatProvider";
+import UpdateGroupChatModal from "./Group/UpdateGroupChatModal";
 //const ENDPOINT = "http://localhost:5000"; // "https://talk-a-tive.herokuapp.com"; -> After deployment
-//var socket, 
+//var socket,
 var selectedChatCompare;
 
 const SingleChat = ({ fetchAgain, setFetchAgain }) => {
@@ -37,7 +37,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
   //     preserveAspectRatio: "xMidYMid slice",
   //   },
   // };
-  const { selectedChat, setSelectedChat, user } =  useContext(ChatContext);
+  const { selectedChat, setSelectedChat, user } = useContext(ChatContext);
 
   const fetchMessages = async () => {
     if (!selectedChat) return;
@@ -45,7 +45,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
     try {
       const config = {
         headers: {
-          Authorization: `Bearer ${user.data.token}`,
+          Authorization: `Bearer ${user.token}`,
         },
       };
 
@@ -78,7 +78,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
         const config = {
           headers: {
             "Content-type": "application/json",
-            Authorization: `Bearer ${user.data.token}`,
+            Authorization: `Bearer ${user.token}`,
           },
         };
         setNewMessage("");
@@ -217,9 +217,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
                 margin="auto"
               />
             ) : (
-              <div className="messages">
-                Scroll
-              </div>
+              <div className="messages">Message here</div>
             )}
 
             <FormControl
@@ -228,13 +226,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
               isRequired
               mt={3}
             >
-              {istyping ? (
-                <div>
-                  LOttie
-                </div>
-              ) : (
-                <></>
-              )}
+              {istyping ? <div>LOttie</div> : <></>}
               <Input
                 variant="filled"
                 bg="#E0E0E0"
@@ -246,10 +238,9 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
           </Box>
         </>
       ) : (
-        // to get socket.io on same page
         <Box d="flex" alignItems="center" justifyContent="center" h="100%">
           <Text fontSize="3xl" pb={3} fontFamily="Work sans">
-            Click on a user to start chatting
+            Click on the   user to start chatting
           </Text>
         </Box>
       )}
