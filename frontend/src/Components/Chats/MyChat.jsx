@@ -10,9 +10,8 @@ import GroupModal from "./GroupModal";
 import { ChatContext } from "../../Context/ChatProvider";
 
 const MyChat = ({ fetchAgain }) => {
-  const BASE_URL = "http://localhost:3001";
   const [loggedUser, setLoggedUser] = useState();
-  const { selectedChat, setSelectedChat, user, chats, setChats } =
+  const { selectedChat, setSelectedChat, user, chats, setChats , BASE_URL } =
     useContext(ChatContext);
   const toast = useToast();
 

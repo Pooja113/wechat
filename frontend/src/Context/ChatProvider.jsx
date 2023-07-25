@@ -9,7 +9,8 @@ export const ChatProvider = ({ children }) => {
   const [selectedChat, setSelectedChat] = useState();
   const [chats, setChats] = useState([]);
   const [notification, setNotification] = useState([]);
-
+  const BASE_URL = "http://localhost:3001"
+  
   useEffect(() => {
     const userInfo = JSON.parse(localStorage.getItem("userInfo"));
     setUser(userInfo);
@@ -31,6 +32,7 @@ export const ChatProvider = ({ children }) => {
         setChats,
         notification,
         setNotification,
+        BASE_URL
       }}
     >
       {children}

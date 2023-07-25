@@ -21,7 +21,6 @@ import UserListItem from "./UserList/UserListItem";
 import { ChatContext } from "../../Context/ChatProvider";
 
 const GroupModal = ({ children }) => {
-  const BASE_URL = "http://localhost:3001";
 
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [groupChatName, setGroupChatName] = useState();
@@ -31,7 +30,7 @@ const GroupModal = ({ children }) => {
   const [loading, setLoading] = useState(false);
   const toast = useToast();
 
-  const { user, chats, setChats } = useContext(ChatContext);
+  const { user, chats, setChats, BASE_URL } = useContext(ChatContext);
 
   const handleGroup = (userToAdd) => {
     if (selectedUsers.includes(userToAdd)) {
