@@ -14,11 +14,9 @@ import io from "socket.io-client";
 import { ChatContext } from "../../Context/ChatProvider";
 import UpdateGroupChatModal from "./Group/UpdateGroupChatModal";
 import ScrollableChat from "./ScrollableChat";
-const ENDPOINT = "http://localhost:3001"; // "https://talk-a-tive.herokuapp.com"; -> After deployment
 let socket, selectedChatCompare;
 
 const SingleChat = ({ fetchAgain, setFetchAgain }) => {
-  const BASE_URL = "http://localhost:3001";
   const [messages, setMessages] = useState([]);
   const [loading, setLoading] = useState(false);
   const [newMessage, setNewMessage] = useState("");
@@ -35,7 +33,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
       preserveAspectRatio: "xMidYMid slice",
     },
   };
-  const { selectedChat, setSelectedChat, user, notification, setNotification } =
+  const { selectedChat, setSelectedChat, user, notification, setNotification, BASE_URL } =
     useContext(ChatContext);
 
   const fetchMessages = async () => {
@@ -106,7 +104,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
   };
 
   useEffect(() => {
-    socket = io(ENDPOINT);
+    socket = io(BASE_URL);
     socket.emit("setup", user);
     socket.on("connected", () => setSocketConnected(true));
     socket.on("typing", () => setIsTyping(true));

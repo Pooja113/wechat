@@ -8,13 +8,14 @@ import {
   VStack,
   useToast,
 } from "@chakra-ui/react";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-
-const BASE_URL = "http://localhost:3001";
+import { ChatContext } from "../../Context/ChatProvider";
 
 const Login = () => {
+  const { BASE_URL } = useContext(ChatContext);
+
   const toast = useToast();
   const navigate = useNavigate();
   const [email, setEmail] = useState();

@@ -23,7 +23,6 @@ import UserListItem from "../UserList/UserListItem";
 import { ChatContext } from "../../../Context/ChatProvider";
 
 const UpdateGroupChatModal = ({ fetchMessages, fetchAgain, setFetchAgain }) => {
-  const BASE_URL = "http://localhost:3001";
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [groupChatName, setGroupChatName] = useState();
   const [search, setSearch] = useState("");
@@ -32,7 +31,7 @@ const UpdateGroupChatModal = ({ fetchMessages, fetchAgain, setFetchAgain }) => {
   const [renameloading, setRenameLoading] = useState(false);
   const toast = useToast();
 
-  const { selectedChat, setSelectedChat, user } = useContext(ChatContext);
+  const { selectedChat, setSelectedChat, user, BASE_URL } = useContext(ChatContext);
 
   const handleSearch = async (query) => {
     setSearch(query);

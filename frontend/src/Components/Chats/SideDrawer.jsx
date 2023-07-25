@@ -31,7 +31,6 @@ import axios from "axios";
 import { getSender } from "../../config/ChatLogics";
 
 const SideDrawer = () => {
-  const BASE_URL = "http://localhost:3001";
   const toast = useToast();
   const navigate = useNavigate();
   const [search, setSearch] = useState();
@@ -46,6 +45,7 @@ const SideDrawer = () => {
     setChats,
     notification,
     setNotification,
+    BASE_URL
   } = useContext(ChatContext);
   const { isOpen, onOpen, onClose } = useDisclosure();
 

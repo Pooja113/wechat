@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import {
@@ -12,9 +12,10 @@ import {
   VStack,
   useToast,
 } from "@chakra-ui/react";
-const BASE_URL = "http://localhost:3001";
+import { ChatContext } from "../../Context/ChatProvider";
 
 const SignUp = () => {
+  const { BASE_URL } = useContext(ChatContext);
   const navigate = useNavigate();
   const toast = useToast();
   const [name, setName] = useState();
